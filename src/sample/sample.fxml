@@ -19,7 +19,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="381.0" prefWidth="568.0" stylesheets="@flashAnzanStylesheet.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <HBox prefHeight="37.0" prefWidth="569.0" BorderPane.alignment="CENTER">
@@ -152,9 +151,9 @@
       </VBox>
    </left>
    <center>
-      <VBox prefHeight="187.0" prefWidth="405.0" BorderPane.alignment="CENTER">
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" BorderPane.alignment="CENTER">
          <children>
-            <StackPane>
+            <StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets right="10.0" />
                </VBox.margin>
@@ -167,7 +166,7 @@
                   </ImageView>
                </children>
             </StackPane>
-            <HBox nodeOrientation="RIGHT_TO_LEFT">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="RIGHT_TO_LEFT">
                <children>
                   <Button mnemonicParsing="false">
                      <graphic>
