@@ -1,0 +1,17 @@
+/*General Configuration*/
+.root{
+    -fx-background-color: #d7e9eb;
+}
+.button{
+    -fx-background-color: #d7e9eb;
+}
+.button:pressed{
+    -fx-opacity: 0.6;
+}
+.toggle-button{
+    -fx-background-color: #d7e9eb;
+    -fx-opacity: 0.5;
+}
+.toggle-button:selected{
+    -fx-opacity: 1.0;
+}
