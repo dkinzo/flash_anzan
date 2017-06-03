@@ -48,3 +48,14 @@
     -fx-font-family: "Arial Black";
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
 }
+
+.combo-box{
+    -fx-background-color: #d7e9eb;;
+    -fx-border-color: #4295e6;
+}
+
+.combo-box .list-cell .text{
+    -fx-fill: Green;
+    -fx-font-weight: bold;
+    -fx-font-size: 10pt;
+}
