@@ -2,16 +2,49 @@
 .root{
     -fx-background-color: #d7e9eb;
 }
+
 .button{
     -fx-background-color: #d7e9eb;
 }
+
 .button:pressed{
     -fx-opacity: 0.6;
 }
+
 .toggle-button{
     -fx-background-color: #d7e9eb;
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.3;
 }
+
 .toggle-button:selected{
     -fx-opacity: 1.0;
+}
+
+.progress-bar .bar{
+    -fx-background-color: #27ee21;
+}
+
+.label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    /*-fx-text-fill: lightcoral;*/
+    -fx-text-fill: #4295e6;
+    -fx-font-family: "Garamond";
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+#label-level{
+    -fx-font-size: 25px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #4295e6;
+    -fx-font-family: "Arial Black";
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
+}
+
+#label-levelNumber{
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: Green;
+    -fx-font-family: "Arial Black";
+    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
 }
