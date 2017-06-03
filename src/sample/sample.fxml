@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 
@@ -153,11 +154,19 @@
    <center>
       <VBox prefHeight="187.0" prefWidth="405.0" BorderPane.alignment="CENTER">
          <children>
-            <TextArea prefHeight="291.0" prefWidth="418.0">
+            <StackPane>
                <VBox.margin>
                   <Insets right="10.0" />
                </VBox.margin>
-            </TextArea>
+               <children>
+                  <TextArea prefHeight="291.0" prefWidth="418.0" />
+                  <ImageView id="playButton" fitHeight="200.0" fitWidth="200.0">
+                     <image>
+                        <Image url="@playSymbol.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
             <HBox nodeOrientation="RIGHT_TO_LEFT">
                <children>
                   <Button mnemonicParsing="false">

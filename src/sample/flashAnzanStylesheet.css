@@ -59,3 +59,7 @@
     -fx-font-weight: bold;
     -fx-font-size: 10pt;
 }
+
+#playButton:hover{
+    -fx-opacity: 0.5pt;
+}
