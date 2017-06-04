@@ -13,7 +13,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("window.fxml"));
         primaryStage.setTitle("Flash Anzan");
-        primaryStage.initStyle(StageStyle.DECORATED);
+        primaryStage.setResizable(false);
+        primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

@@ -2,11 +2,20 @@ package main;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 
 public class Controller {
 
     @FXML
     private ComboBox<String> comboRange = new ComboBox<>();
+
+    @FXML
+    private ImageView playButton = new ImageView();
+
+    @FXML
+    private Label randomNumbers = new Label();
 
     /**
      * Array containing max values of random number
@@ -18,8 +27,6 @@ public class Controller {
             9999,
             99999
     };
-
-
 
     public void initialize(){
 
@@ -37,7 +44,15 @@ public class Controller {
         for (int i = 0; i < 5; i++){
             comboRange.getItems().add(comboBoxMessage + Integer.toString(maxValue[i]));
         }
+    }
 
+    public void playOnClick(){
+        //make play button invisible
+        playButton.setVisible(false);
+
+        //display number on text area
+        randomNumbers.setText("5");
 
     }
+
 }
