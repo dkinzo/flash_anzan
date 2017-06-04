@@ -1,18 +1,15 @@
 package main;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 
 public class Controller {
 
     @FXML
-    private ComboBox comboRange = new ComboBox();
+    private ComboBox<String> comboRange = new ComboBox<>();
 
     /**
-     * @Constant Array containing max values of random number
+     * Array containing max values of random number
      */
     final private int maxValue[] = {
             9,
@@ -22,21 +19,25 @@ public class Controller {
             99999
     };
 
-//    //Buttons
-//    @FXML
-//    private Button btnDivision;
-//    @FXML
-//    private Button btnPlus;
-//    @FXML
-//    private Button btnMinus;
-//    @FXML
-//    private Button btnMultiplication;
 
 
     public void initialize(){
+
+        //Initialize Range for random number values
+        /* Expected comboBox values - Fixed values, should not change during application
+         * 1 - 9
+         * 1 - 99
+         * 1 - 999
+         * 1 - 9999
+         * 1 - 99999
+         */
+        //Constant string in items
         final String comboBoxMessage = "1 - ";
-        //Initialize range comboBox
-        comboRange.getItems().add(comboBoxMessage);
+        //Add values to comboBox range
+        for (int i = 0; i < 5; i++){
+            comboRange.getItems().add(comboBoxMessage + Integer.toString(maxValue[i]));
+        }
+
 
     }
 }
