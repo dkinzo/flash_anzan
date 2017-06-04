@@ -159,7 +159,7 @@
                </VBox.margin>
                <children>
                   <Region id="#randomNumber" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #a9a9a9;" />
-                  <Label id="randomNumber" fx:id="randomNumbers" text="3" />
+                  <Label id="randomNumber" fx:id="labelRandomNumber" />
                   <ImageView id="playButton" fx:id="playButton" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#playOnClick">
                      <image>
                         <Image url="@playSymbol.png" />
