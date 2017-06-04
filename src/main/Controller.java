@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Controller {
 
@@ -88,6 +89,19 @@ public class Controller {
 
         //Sanity check label is visible
         labelRandomNumber.setVisible(true);
+
+        //Generate random number according to range
+        _randomNumber = getRandomNumber();
+        //Display number on text area
+        labelRandomNumber.setText(Integer.toString(_randomNumber));
+
+        //Wait before displaying next number
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //Generate random number according to range
         _randomNumber = getRandomNumber();
         //Display number on text area
