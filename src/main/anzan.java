@@ -78,9 +78,9 @@ class anzan {
     //region private methods
 
     /**
-     * Calculate anzan delay given a Level. The anzan delay is the delay between flashing numbers. The intial value
+     * Calculate anzan delay given a Level. The anzan delay is the delay between flashing numbers. The initial value
      * is determined by the constant initialAnzanDelay and decreases by anzanDelayStep every level until reaches
-     * the mininum delay set by the minAnzanDelay constant. The anzan delay should never be less than minAnzanDelay.
+     * the minimum delay set by the minAnzanDelay constant. The anzan delay should never be less than minAnzanDelay.
      *
      * @return calculated anzan delay in milliseconds
      */

@@ -64,7 +64,7 @@ class anzanTest {
         assertTrue(initialDelay.toMillis() >= finalDelay.toMillis(), "Delay not decreasing with level increase");
 
         //Assert delay not less than minimum
-        assertTrue(finalDelay.compareTo(anzan.minAnzanDelay) >= 0, "Delay exeeds minimum delay");
+        assertTrue(finalDelay.compareTo(anzan.minAnzanDelay) >= 0, "Delay exceeds minimum delay");
     }
 
     @Test //Verify delay never less than minimum delay
@@ -84,7 +84,7 @@ class anzanTest {
             defaultAnzan.advanceLevel();
             //Compute new delay
             Delay = Delay.minus(anzan.anzanDelayStep);
-            //Make sure Delay doesn't go below mininum delay
+            //Make sure Delay doesn't go below minimum delay
             if(Delay.compareTo(anzan.minAnzanDelay) < 0){
                 Delay = anzan.minAnzanDelay;
             }

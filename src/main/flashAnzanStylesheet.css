@@ -27,7 +27,6 @@
 .label {
     -fx-font-size: 20px;
     -fx-font-weight: bold;
-    /*-fx-text-fill: lightcoral;*/
     -fx-text-fill: #4295e6;
     -fx-font-family: "Garamond";
     -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );
