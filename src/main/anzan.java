@@ -1,6 +1,8 @@
 package main;
 
+import java.time.Duration;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by derekkinzo on 6/7/17.
@@ -13,10 +15,15 @@ public class anzan {
      * The level determines the amount of numbers to be displayed in each iteration.
      * The time delay between numbers to be displayed is also directly coupled with level.
      */
-    private int Level;                      ///< Current anzan level
-    final static public int minLevel = 1;         ///< Minimum valid level
-    private int anzanMillisDelay;           ///< Delay between numbers displayed in milliseconds
-    final static public int minMillisDelay = 300; ///< Minimum delay in milliseconds
+    final static int minLevel = 1;           ///< Minimum valid level
+    private int Level = minLevel;                   ///< Current anzan level
+
+    final static Duration minAnzanDelay = Duration.ofMillis(100);        ///< Minimum delay between flashing numbers
+    final static Duration initialAnzanDelay = Duration.ofMillis(1000);   ///< Initial anzan delay set for minimum level
+    final static Duration anzanDelayStep = Duration.ofMillis(100);       ///< Decrease in delay between subsequent levels
+    private Duration anzanDelay =  minAnzanDelay;
+
+    private Random randGenerator = new Random();    ///< Random number generator
 
     //region Constructors
     public anzan(int _level) {
@@ -24,6 +31,7 @@ public class anzan {
     }
 
     public anzan() {
+        //Set initial level to minimum level if not specified in constructor
         setLevel(minLevel);
     }
 
@@ -31,25 +39,36 @@ public class anzan {
 
     //region Getters And Setters
 
-    protected void setAnzanMillisDelay() {
+    /**
+     * Set anzan delay based on current level. Anzan delay is determined by calling calculateAnzanDelay() method
+     */
+    private void setAnzanDelay() {
         /* The anzan delay is calculated based on current level. The delay decreases by 100ms
          * after each level provided it doesn't go below minimum allowable delay.
          */
-
-        this.anzanMillisDelay = anzanMillisDelay;
+        anzanDelay = calculateAnzanDelay(getLevel());
     }
 
-    public int getAnzanMillisDelay() {
-        return anzanMillisDelay;
+    Duration getAnzanDelay() {
+        return anzanDelay;
     }
 
-    public int getLevel() {
+    int getLevel() {
         return this.Level;
     }
 
-    public void setLevel(int _level) throws IllegalArgumentException{
+    /**
+     * Level setter. Validate desired level by checking if desired level is not less than minimum level
+     * @param _level desired level to be set
+     * @throws IllegalArgumentException If desired level is less than minimum level
+     */
+    void setLevel(int _level) throws IllegalArgumentException{
+        //Verify level is within allowable range
         if(_level >= minLevel) {
+            //If valid _level update member variable
             this.Level = _level;
+            //Compute new delay based on current level
+            setAnzanDelay();
         } else {
             throw new IllegalArgumentException("Level is less than minimum level() " + minLevel);
         }
@@ -57,18 +76,38 @@ public class anzan {
     //endregion
 
 
-//    private int anumber;
-//
-//    public void setAnumber(int newanumber) {
-//        if (newanumber >= 1 && newanumber <= 3) {
-//            anumber = newanumber;
-//        } else {
-//            throw new IllegalArgumentException("anumber out of range");
-//        }
-//    }
+    //region private methods
+
+    /**
+     * Calculate anzan delay given a Level. The anzan delay is the delay between flashing numbers. The intial value
+     * is determined by the constant initialAnzanDelay and decreases by anzanDelayStep every level until reaches
+     * the mininum delay set by the minAnzanDelay constant. The anzan delay should never be less than minAnzanDelay.
+     *
+     * @return calculated anzan delay in milliseconds
+     */
+    private Duration calculateAnzanDelay(int targetLevel) {
+
+        //For minLevel delay should be initialDelay
+        //For minLevel + 1 delay should be initialDelay + 1
+        //and so on
+        Duration calculatedDelay = initialAnzanDelay.minus(anzanDelayStep.multipliedBy(targetLevel - anzan.minLevel));
+        if (calculatedDelay.compareTo(minAnzanDelay) < 0){
+            calculatedDelay = minAnzanDelay;
+        }
+
+        return calculatedDelay;
+    }
 
 
-    private Random randGenerator = new Random(); ///< Random number generator
+    //endregion
+
+
+    /**
+     * Advances to next level (increment 1 level)
+     */
+    void advanceLevel() {
+        setLevel(getLevel() + 1);
+    }
 
 //    /**
 //     * Generate random number according to range value specified by comboBox
