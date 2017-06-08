@@ -2,7 +2,6 @@ package main;
 
 import java.time.Duration;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by derekkinzo on 6/7/17.
