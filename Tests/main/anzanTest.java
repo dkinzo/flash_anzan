@@ -45,10 +45,10 @@ class anzanTest {
         assertEquals(19, defaultAnzan.getLevel(), "Level setter not working");
     }
 
-    @Test //Verify initial anzan delay is equal to initialAnzanDelay constant
+    @Test //Verify initial anzan delay is equal to initial constant
     void testInitialAnzanDelay() {
         defaultAnzan.setLevel(anzan.minLevel);
-        assertEquals(anzan.initialAnzanDelay, defaultAnzan.getAnzanDelay(), "Initial anzan delay is incorrect");
+        assertEquals(anzan.flashDelay.initial, defaultAnzan.getAnzanDelay(), "Initial anzan delay is incorrect");
     }
 
     @Test //Verify set delay changes delay based on level
@@ -64,16 +64,16 @@ class anzanTest {
         assertTrue(initialDelay.toMillis() >= finalDelay.toMillis(), "Delay not decreasing with level increase");
 
         //Assert delay not less than minimum
-        assertTrue(finalDelay.compareTo(anzan.minAnzanDelay) >= 0, "Delay exceeds minimum delay");
+        assertTrue(finalDelay.compareTo(anzan.flashDelay.minimum) >= 0, "Delay exceeds minimum delay");
     }
 
     @Test //Verify delay never less than minimum delay
     void testMinimumAnzanDelay() {
         defaultAnzan.setLevel(9999);
-        assertTrue(defaultAnzan.getAnzanDelay().compareTo(anzan.minAnzanDelay) >= 0, "Delay is less than minimum delay");
+        assertTrue(defaultAnzan.getAnzanDelay().compareTo(anzan.flashDelay.minimum) >= 0, "Delay is less than minimum delay");
     }
 
-    @Test //Verify anzan delay decreases by anzanDelayStep after each level
+    @Test //Verify anzan delay decreases by step after each level
     void testAnzanDelayStep() {
         defaultAnzan.setLevel(anzan.minLevel);
         //Anzan delay should be minimum since level its minimum level -- this is tested above
@@ -83,13 +83,19 @@ class anzanTest {
             //Increase level
             defaultAnzan.advanceLevel();
             //Compute new delay
-            Delay = Delay.minus(anzan.anzanDelayStep);
+            Delay = Delay.minus(anzan.flashDelay.step);
             //Make sure Delay doesn't go below minimum delay
-            if(Delay.compareTo(anzan.minAnzanDelay) < 0){
-                Delay = anzan.minAnzanDelay;
+            if(Delay.compareTo(anzan.flashDelay.minimum) < 0){
+                Delay = anzan.flashDelay.minimum;
             }
             //Assert new delay is same as delay at level
             assertEquals(Delay, defaultAnzan.getAnzanDelay(), "Delay step not working");
         }
+    }
+
+    @Test //Test generate anzan sequence function by making sure doesn't return empty list
+    void testGenerateAnzanSequence() {
+        defaultAnzan.generateSequence();
+        //TODO implement
     }
 }
