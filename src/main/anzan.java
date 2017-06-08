@@ -24,7 +24,7 @@ public class anzan {
     }
 
     public anzan() {
-        setLevel(0);
+        setLevel(minLevel);
     }
 
     //endregion

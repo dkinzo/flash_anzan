@@ -18,16 +18,16 @@ class anzanTest {
         defaultAnzan = new anzan();
     }
 
-    @Test //Verify default constructor initializes level to 0;
+    @Test //Verify default constructor initializes level to minimum Level
     void testDefaultConstructor() {
         anzan testAnzan = new anzan();
-        assertEquals(0, testAnzan.getLevel(), "Default constructor level failed");
+        assertEquals(anzan.minLevel, testAnzan.getLevel(), "Default constructor level failed");
     }
 
     @Test //Verify constructor works and sets level
     void testInitialLevel() {
-        anzan testAnzan = new anzan(0);
-        assertEquals(0, testAnzan.getLevel(), "Initial level not set by constructor");
+        anzan testAnzan = new anzan(anzan.minLevel);
+        assertEquals(anzan.minLevel, testAnzan.getLevel(), "Initial level not set by constructor");
     }
 
     @Test   //Verify object construction given invalid level throws exception
@@ -46,7 +46,7 @@ class anzanTest {
     @Test //Verify set delay changes delay based on level
     void setAnzanMillisDelay() {
         //Set initial level for initial delay
-        defaultAnzan.setLevel(0);
+        defaultAnzan.setLevel(anzan.minLevel);
 
         //Get initial delay
         int initialDelay = defaultAnzan.getAnzanMillisDelay();
@@ -63,6 +63,6 @@ class anzanTest {
     @Test //Verify delay never less than minimum delay
     void testMinimumAnzanDelay() {
         defaultAnzan.setLevel(9999);
-        assertTrue(defaultAnzan.getAnzanMillisDelay() >= anzan.minMillisDelay, "Delay exeeds minimum delay");
+        assertTrue(defaultAnzan.getAnzanMillisDelay() >= anzan.minMillisDelay, "Delay is less than minimum delay");
     }
 }
