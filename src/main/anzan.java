@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  *
  * Class models behaviour of flash anzan engine
  */
-public class anzan {
+class anzan {
 
     /*
      * The level determines the amount of numbers to be displayed in each iteration.

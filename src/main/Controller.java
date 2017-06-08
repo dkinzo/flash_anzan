@@ -49,7 +49,7 @@ public class Controller {
     }
 
     public void playOnClick(){
-        int _randomNumber;
+        //int _randomNumber;
 
 //        //make play button invisible
 //        playButton.setVisible(false);

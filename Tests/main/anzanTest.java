@@ -52,7 +52,7 @@ class anzanTest {
     }
 
     @Test //Verify set delay changes delay based on level
-    void setAnzanMillisDelay() {
+    void setAnzanDelay() {
         //Set initial level for initial delay
         defaultAnzan.setLevel(anzan.minLevel);
         //Get initial delay
@@ -64,7 +64,6 @@ class anzanTest {
         assertTrue(initialDelay.toMillis() >= finalDelay.toMillis(), "Delay not decreasing with level increase");
 
         //Assert delay not less than minimum
-        int delayTest = finalDelay.compareTo(anzan.minAnzanDelay);
         assertTrue(finalDelay.compareTo(anzan.minAnzanDelay) >= 0, "Delay exeeds minimum delay");
     }
 
