@@ -71,7 +71,7 @@ class anzan {
      * numbers is defined by a constant and correspond to the minimum level. After every level the sequence length
      * increments by numberSequence.increment
      */
-    private void setSequenceLength() {
+    private void setSequenceLength() throws IllegalArgumentException{
         int _sequenceLength = calculateSequenceLength(getCurrentLevel());
 
         //Make sure given argument is within allowable range
@@ -90,7 +90,7 @@ class anzan {
     /**
      * Set anzan delay based on current level. Anzan delay is determined by calling calculateAnzanDelay() method
      */
-    private void setAnzanDelay() {
+    private void setAnzanDelay() throws IllegalArgumentException{
         /* The anzan delay is calculated based on current level. The delay decreases by 100ms
          * after each level provided it doesn't go below minimum allowable delay.
          */
@@ -154,7 +154,12 @@ class anzan {
         return calculatedDelay;
     }
 
-    //TODO header
+    /**
+     * Calculates flash sequence length given level. Flash sequence at minimum level should contain numberSequence.minimum numbers
+     * //TODO finish header
+     * @param currentLevel
+     * @return
+     */
     private int calculateSequenceLength(int currentLevel) {
         return numberSequence.minimum;
     }
