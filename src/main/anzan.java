@@ -16,13 +16,13 @@ class anzan {
      * The time delay between numbers to be displayed is also directly coupled with level.
      */
     static class level{
-        final static int initial = 1;           ///< Initial level
+        final static int minimum = 1;           ///< Initial level
         final static int maximum = 99;          ///< Maximum level
         final static int normalIncrement = 1;       ///< Normal level increment
         //TODO implement advanced increment
         final static int advancedIncrement = 2;     ///< Advanced level increment (used when perfect score is achieved in level)
     }
-    private int currentLevel = level.initial;            ///< Current anzan level
+    private int currentLevel = level.minimum;            ///< Current anzan level
 
     /*
      * flashDelay abstracts constants related to delays between numbers that are displayed in the flash anzan sequence
@@ -34,14 +34,17 @@ class anzan {
     }
     private Duration anzanDelay = flashDelay.initial;               ///< Current flash delay for anzan object
 
+    /*
+     * numberSequence defines the parameters for the sequence of numbers generated to be displayed.
+     */
     static class numberSequence {
-        final static int initial = 2;       ///< Initial amount of numbers displayed at initial level
+        final static int minimum = 2;       ///< Initial amount of numbers displayed at minimum level
         final static int increment = 1;     ///< Amount of numbers added per level passed 
                                             ///  (e.g. if level 1 displays 2 numbers, level 2 will display 2 numbers + increment)
     }
-    
+    private int sequenceLength = numberSequence.minimum; ///< Define length of flash sequence
+
     private Random randGenerator = new Random();    ///< Random number generator
-    //endregion
 
     //region Constructors
     public anzan(int _level) {
@@ -49,13 +52,40 @@ class anzan {
     }
 
     public anzan() {
-        //Set initial level to minimum level if not specified in constructor
-        setCurrentLevel(level.initial);
+        //Set minimum level to minimum level if not specified in constructor
+        setCurrentLevel(level.minimum);
     }
 
     //endregion
 
     //region Getters And Setters
+
+    //endregion
+
+    int getSequenceLength() {
+        return sequenceLength;
+    }
+
+    /**
+     * Sets flash sequence length. This determined how many numbers a flash sequence contains. The mininum
+     * numbers is defined by a constant and correspond to the minimum level. After every level the sequence length
+     * increments by numberSequence.increment
+     */
+    private void setSequenceLength() {
+        int _sequenceLength = calculateSequenceLength(getCurrentLevel());
+
+        //Make sure given argument is within allowable range
+        //Since there is no maximum value, only check minimum value
+        if (_sequenceLength < numberSequence.minimum) {
+            throw new IllegalArgumentException("Attempted to set sequence length to smaller than acceptable");
+        }
+
+        this.sequenceLength = _sequenceLength;
+    }
+
+    Duration getAnzanDelay() {
+        return anzanDelay;
+    }
 
     /**
      * Set anzan delay based on current level. Anzan delay is determined by calling calculateAnzanDelay() method
@@ -64,11 +94,16 @@ class anzan {
         /* The anzan delay is calculated based on current level. The delay decreases by 100ms
          * after each level provided it doesn't go below minimum allowable delay.
          */
-        anzanDelay = calculateAnzanDelay(getCurrentLevel());
-    }
+        Duration _anzanDelay = calculateAnzanDelay(getCurrentLevel());
 
-    Duration getAnzanDelay() {
-        return anzanDelay;
+        //Validate delay to make sure within allowable range
+        if((_anzanDelay.toMillis() < flashDelay.minimum.toMillis()) ||
+           (_anzanDelay.toMillis() > flashDelay.initial.toMillis())){
+            throw new IllegalArgumentException("Desired anzan delay is out of bounds");
+        }
+
+        //Set delay parameter
+        this.anzanDelay = _anzanDelay;
     }
 
     int getCurrentLevel() {
@@ -82,32 +117,36 @@ class anzan {
      */
     void setCurrentLevel(int _level) throws IllegalArgumentException{
         //Verify level is within allowable range
-        if(_level >= level.initial) {
+        if(_level >= level.minimum) {
             //If valid _level update member variable
             this.currentLevel = _level;
             //Compute new delay based on current level
             setAnzanDelay();
+            //Compute flash sequence length based on current level
+            setSequenceLength();
         } else {
-            throw new IllegalArgumentException("currentLevel is less than minimum level() " + level.initial);
+            throw new IllegalArgumentException("currentLevel is less than minimum level() " + level.minimum);
         }
     }
+
     //endregion
 
     //region private methods
 
+
     /**
-     * Calculate anzan delay given a currentLevel. The anzan delay is the delay between flashing numbers. The initial value
-     * is determined by the constant initial and decreases by increment every level until reaches
+     * Calculate anzan delay given a currentLevel. The anzan delay is the delay between flashing numbers. The minimum value
+     * is determined by the constant minimum and decreases by increment every level until reaches
      * the minimum delay set by the minimum constant. The anzan delay should never be less than minimum.
      *
      * @return calculated anzan delay in milliseconds
      */
     private Duration calculateAnzanDelay(int targetLevel) {
 
-        //For initial delay should be initialDelay
-        //For initial + 1 delay should be initialDelay + 1
+        //For minimum delay should be initialDelay
+        //For minimum + 1 delay should be initialDelay + 1
         //and so on
-        Duration calculatedDelay = flashDelay.initial.minus(flashDelay.increment.multipliedBy(targetLevel - anzan.level.initial));
+        Duration calculatedDelay = flashDelay.initial.minus(flashDelay.increment.multipliedBy(targetLevel - anzan.level.minimum));
         if (calculatedDelay.compareTo(flashDelay.minimum) < 0){
             calculatedDelay = flashDelay.minimum;
         }
@@ -115,6 +154,10 @@ class anzan {
         return calculatedDelay;
     }
 
+    //TODO header
+    private int calculateSequenceLength(int currentLevel) {
+        return numberSequence.minimum;
+    }
     //endregion
 
     //region public methods
@@ -133,7 +176,9 @@ class anzan {
      */
     int[] generateSequence() {
 
-        return null;
+        int array[] = {0, 0, 0};
+
+        return array;
     }
 
     //endregion

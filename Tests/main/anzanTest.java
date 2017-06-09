@@ -4,10 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.function.IntPredicate;
-import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,13 +24,13 @@ class anzanTest {
     @Test //Verify default constructor initializes level to minimum Level
     void testDefaultConstructor() {
         anzan testAnzan = new anzan();
-        assertEquals(anzan.level.initial, testAnzan.getCurrentLevel(), "Default constructor level failed");
+        assertEquals(anzan.level.minimum, testAnzan.getCurrentLevel(), "Default constructor level failed");
     }
 
     @Test //Verify constructor works and sets level
     void testInitialLevel() {
-        anzan testAnzan = new anzan(anzan.level.initial);
-        assertEquals(anzan.level.initial, testAnzan.getCurrentLevel(), "Initial level not set by constructor");
+        anzan testAnzan = new anzan(anzan.level.minimum);
+        assertEquals(anzan.level.minimum, testAnzan.getCurrentLevel(), "Initial level not set by constructor");
     }
 
     @Test   //Verify object construction given invalid level throws exception
@@ -49,17 +46,17 @@ class anzanTest {
         assertEquals(19, defaultAnzan.getCurrentLevel(), "Level setter not working");
     }
 
-    @Test //Verify initial anzan delay is equal to initial constant
+    @Test //Verify minimum anzan delay is equal to minimum constant
     void testInitialAnzanDelay() {
-        defaultAnzan.setCurrentLevel(anzan.level.initial);
+        defaultAnzan.setCurrentLevel(anzan.level.minimum);
         assertEquals(anzan.flashDelay.initial, defaultAnzan.getAnzanDelay(), "Initial anzan delay is incorrect");
     }
 
     @Test //Verify set delay changes delay based on level
     void setAnzanDelay() {
-        //Set initial level for initial delay
-        defaultAnzan.setCurrentLevel(anzan.level.initial);
-        //Get initial delay
+        //Set minimum level for minimum delay
+        defaultAnzan.setCurrentLevel(anzan.level.minimum);
+        //Get minimum delay
         Duration initialDelay = defaultAnzan.getAnzanDelay();
 
         //Change level and verify delay is smalled as level increases
@@ -81,11 +78,11 @@ class anzanTest {
 
     @Test //Verify anzan delay decreases by increment after each level
     void testAnzanDelayStep() {
-        defaultAnzan.setCurrentLevel(anzan.level.initial);
-        //Anzan delay should be minimum since level its minimum level -- this is tested above
+        defaultAnzan.setCurrentLevel(anzan.level.minimum);
+        //Anzan delay should be minimum since level is minimum level -- this is tested above
         Duration Delay = defaultAnzan.getAnzanDelay();
 
-        for (int i = 0; i < 99; i++) {
+        for (int i = anzan.level.minimum; i < anzan.level.minimum; i++) {
             //Increase level
             defaultAnzan.advanceLevel();
             //Compute new delay
@@ -99,8 +96,8 @@ class anzanTest {
         }
     }
 
-    @Test //Test generate anzan sequence function by making sure doesn't return empty list
-    void testGenerateAnzanSequence() {
+    @Test //Test generate anzan sequence function doesn't return empty list
+    void AnzanSequenceEmpty() {
         //Generate sequence
         int flashSequence[] = defaultAnzan.generateSequence();
         //Verify sequence not empty array
@@ -108,33 +105,32 @@ class anzanTest {
     }
 
     @Test //Test generateSequence return correct number of elements based on level
-    void testGenerateSequenceLength() {
-        //Set to initial level
-        defaultAnzan.setCurrentLevel(anzan.level.initial);
-        //Generate sequence at initial level
+    void AnzanSequenceCorrectMinimumLength() {
+        //Set to minimum level
+        defaultAnzan.setCurrentLevel(anzan.level.minimum);
+        //Generate sequence at minimum level
         int flashSequence[] = defaultAnzan.generateSequence();
 
         //Make sure sequence generated has correct amount of numbers in it
-        assertEquals(anzan.numberSequence.initial, flashSequence.length, "Incorrect initial sequence length");
+        assertEquals(anzan.numberSequence.minimum, flashSequence.length, "Incorrect minimum sequence length");
     }
 
     @Test //Test generateSequence increments the correct amount of numbers per level
-    void testGenerateSequenceIncrement() {
-        //Set to initial level
-        defaultAnzan.setCurrentLevel(anzan.level.initial);
-        //Generate sequence at initial level
-        int flashSequence[] = defaultAnzan.generateSequence();
+    void AnzanSequenceLengthIncremet() {
+        //Set to minimum level
+        defaultAnzan.setCurrentLevel(anzan.level.minimum);
+        int flashSequence[];
 
-        //no need to test initial level, previous test already does that
+        //no need to test minimum level, previous test already does that
 
-        for (int i = 0; i < anzan.level.maximum; i++) {
+        for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
             //go to next level
             defaultAnzan.advanceLevel();
             //Generate sequence
             flashSequence = defaultAnzan.generateSequence();
 
             //check generated sequence has correct length
-            assertEquals(anzan.numberSequence.initial + anzan.numberSequence.increment*defaultAnzan.getCurrentLevel(),
+            assertEquals(anzan.numberSequence.minimum + anzan.numberSequence.increment*defaultAnzan.getCurrentLevel(),
                          flashSequence.length,
                          "Incorrect sequence length");
         }
@@ -146,8 +142,49 @@ class anzanTest {
         defaultAnzan.setCurrentLevel(anzan.level.maximum);
         int flashSequence[] = defaultAnzan.generateSequence();
 
-        //Make sure sequence does not contain same numbers
-//        boolean match = Arrays.stream(flashSequence).allMatch(IntPredicate.equals(flashSequence[0]));
-//        assertFalse(match, "Flash sequence all same values");
+        //check if array is all same values by comparing each value with first value
+        for (int i = 1; i < flashSequence.length; i++) {
+            if(flashSequence[0] != flashSequence[i]) {
+                //found a different element so not all elements are same - pass test
+                return;
+            }
+        }
+
+        //If got here all elements are the same so RNG not working -- probably
+        fail("flash sequence has all same numbers");
+    }
+
+    @Test //Verify flash sequence parameter is of correct length given level
+        // This function only tests that the getSequenceLength method returns expected value
+    void testFlashSequenceLength() {
+        //Test length for subsequent levels
+        for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
+            //Set level
+            defaultAnzan.setCurrentLevel(i);
+            //Make sure sequence length getter returns correct value
+            //sequence length should start at minimum and increment every level
+            assertEquals(anzan.numberSequence.minimum + i*anzan.numberSequence.increment,
+                                  defaultAnzan.getSequenceLength(),
+                        "Sequence length getter returns incorrect value");
+        }
+    }
+
+    @Test //Verify generate sequence has correct length
+            //This method generated a sequence and confirms it has the expected length
+    void testGeneratedSequenceLength() {
+        int flashSequence[];
+        //Test length for subsequent levels
+        for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
+            //Set level
+            defaultAnzan.setCurrentLevel(i);
+            //Generate sequence
+            flashSequence = defaultAnzan.generateSequence();
+
+            //Make sure sequence length is correct
+            //sequence length should start at minimum and increment every level
+            assertEquals(defaultAnzan.getSequenceLength(), //Can just call this method here because its being testes above
+                         flashSequence.length,
+                        "Sequence length getter returns incorrect value");
+        }
     }
 }
