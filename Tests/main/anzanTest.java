@@ -190,4 +190,14 @@ class anzanTest {
                         "Sequence length getter returns incorrect value");
         }
     }
+
+    @Test //Verify maxNumber getter and setter works
+    void maxNumberGetterSetter() {
+        fail("unimplemented");
+    }
+
+    @Test //Verify flash sequence doesn't contain numbers outside allowable range
+    void maxAndMinSequenceNumber() {
+        fail("unimplemented");
+    }
 }

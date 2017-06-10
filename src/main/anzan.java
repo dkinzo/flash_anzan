@@ -45,10 +45,10 @@ class anzan {
     private int sequenceLength = numberSequence.minimum; ///< Define length of flash sequence
 
     final static int defaultRange = 9;   ///< Default range of random numbers
-    private int maxNumber = 0;          ///< max allowable number in flash sequence
-    private Random randGenerator = new Random();    ///< Random number generator
 
-//    endregion
+    private int maxNumber = 0;          ///< max allowable number in flash sequence
+
+    private Random randGenerator = new Random();    ///< Random number generator
 
     //region Constructors
     public anzan(int _level) {
@@ -63,6 +63,15 @@ class anzan {
     //endregion
 
     //region Getters And Setters
+
+    public int getMaxNumber() {
+        return maxNumber;
+    }
+
+    //    endregion
+    public void setMaxNumber(int maxNumber) {
+        this.maxNumber = maxNumber;
+    }
 
     int getSequenceLength() {
         return sequenceLength;
