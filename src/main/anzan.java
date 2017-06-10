@@ -21,8 +21,10 @@ class anzan {
         final static int normalIncrement = 1;       ///< Normal level increment
         //TODO implement advanced increment
         final static int advancedIncrement = 2;     ///< Advanced level increment (used when perfect score is achieved in level)
+
+        static int currentLevel = minimum;            ///< Current anzan level
     }
-    private int currentLevel = level.minimum;            ///< Current anzan level
+
 
     /*
      * flashDelay abstracts constants related to delays between numbers that are displayed in the flash anzan sequence
@@ -41,11 +43,47 @@ class anzan {
         final static int minimum = 2;       ///< Initial amount of numbers displayed at minimum level
         final static int increment = 1;     ///< Amount of numbers added per level passed 
                                             ///  (e.g. if level 1 displays 2 numbers, level 2 will display 2 numbers + increment)
+
+        private static int sequenceLength = minimum;    ///< Define length of flash sequence
+
+        /**
+         * Sets flash sequence length. This determined how many numbers a flash sequence contains. The mininum
+         * numbers is defined by a constant and correspond to the minimum level. After every level the sequence length
+         * increments by numberSequence.increment
+         */
+        static void updateSequenceLength() throws IllegalArgumentException{
+            int _sequenceLength = calculateSequenceLength(level.currentLevel);
+
+            //Make sure given argument is within allowable range
+            //Since there is no maximum value, only check minimum value
+            if (_sequenceLength < numberSequence.minimum) {
+                throw new IllegalArgumentException("Attempted to set sequence length to smaller than acceptable");
+            }
+
+            sequenceLength = _sequenceLength;
+        }
+
+        /**
+         * Calculates flash sequence length given level. Flash sequence at minimum level should contain numberSequence.minimum numbers
+         * After each level flash sequence length increments by numberSequence.increment
+         * @param desiredLevel respective level to calculate sequence length based off of
+         * @return The sequence length
+         */
+        private static int calculateSequenceLength(int desiredLevel) {
+            return minimum + (desiredLevel - level.minimum) * increment;
+        }
+
     }
-    private int sequenceLength = numberSequence.minimum; ///< Define length of flash sequence
 
     private Random randGenerator = new Random();    ///< Random number generator
 
+//    region Getters and Setters
+
+    static int getSequenceLength() {
+        return numberSequence.sequenceLength;
+    }
+
+//    endregion
     //region Constructors
     public anzan(int _level) {
         setCurrentLevel(_level);
@@ -58,30 +96,6 @@ class anzan {
 
     //endregion
 
-    //region Getters And Setters
-
-    //endregion
-
-    int getSequenceLength() {
-        return sequenceLength;
-    }
-
-    /**
-     * Sets flash sequence length. This determined how many numbers a flash sequence contains. The mininum
-     * numbers is defined by a constant and correspond to the minimum level. After every level the sequence length
-     * increments by numberSequence.increment
-     */
-    private void setSequenceLength() throws IllegalArgumentException{
-        int _sequenceLength = calculateSequenceLength(getCurrentLevel());
-
-        //Make sure given argument is within allowable range
-        //Since there is no maximum value, only check minimum value
-        if (_sequenceLength < numberSequence.minimum) {
-            throw new IllegalArgumentException("Attempted to set sequence length to smaller than acceptable");
-        }
-
-        this.sequenceLength = _sequenceLength;
-    }
 
     Duration getAnzanDelay() {
         return anzanDelay;
@@ -107,7 +121,7 @@ class anzan {
     }
 
     int getCurrentLevel() {
-        return this.currentLevel;
+        return level.currentLevel;
     }
 
     /**
@@ -119,11 +133,11 @@ class anzan {
         //Verify level is within allowable range
         if(_level >= level.minimum) {
             //If valid _level update member variable
-            this.currentLevel = _level;
+            level.currentLevel = _level;
             //Compute new delay based on current level
             setAnzanDelay();
             //Compute flash sequence length based on current level
-            setSequenceLength();
+            numberSequence.updateSequenceLength();
         } else {
             throw new IllegalArgumentException("currentLevel is less than minimum level() " + level.minimum);
         }
@@ -154,15 +168,6 @@ class anzan {
         return calculatedDelay;
     }
 
-    /**
-     * Calculates flash sequence length given level. Flash sequence at minimum level should contain numberSequence.minimum numbers
-     * //TODO finish header
-     * @param currentLevel
-     * @return
-     */
-    private int calculateSequenceLength(int currentLevel) {
-        return numberSequence.minimum;
-    }
     //endregion
 
     //region public methods
@@ -181,18 +186,21 @@ class anzan {
      */
     int[] generateSequence() {
 
-        int array[] = {0, 0, 0};
+        int flashSequence[] = new int[getSequenceLength()];
 
-        return array;
+        for (int i = 0; i < flashSequence.length; i++) {
+            flashSequence[i] = getRandomNumber();
+        }
+
+        return flashSequence;
     }
 
-    //endregion
-
-//    /**
-//     * Generate random number according to range value specified by comboBox
-//     * @return random number generated
-//     */
-//    private int getRandomNumber(){
+    /**
+     * Generate random number according to range value specified by comboBox
+     * @return random number generated
+     */
+    private int getRandomNumber(){
+        return 0;
 //        int rangeIndex = 0; //Helper variable to store range value
 //        try {
 //            //check range value from comboBox
@@ -215,5 +223,6 @@ class anzan {
 //        catch (Exception e){
 //            throw e;
 //        }
-//    }
+    }
+    //endregion
 }

@@ -120,6 +120,7 @@ class anzanTest {
         //Set to minimum level
         defaultAnzan.setCurrentLevel(anzan.level.minimum);
         int flashSequence[];
+        int sequenceLength = anzan.numberSequence.minimum;
 
         //no need to test minimum level, previous test already does that
 
@@ -130,7 +131,7 @@ class anzanTest {
             flashSequence = defaultAnzan.generateSequence();
 
             //check generated sequence has correct length
-            assertEquals(anzan.numberSequence.minimum + anzan.numberSequence.increment*defaultAnzan.getCurrentLevel(),
+            assertEquals((sequenceLength = sequenceLength + anzan.numberSequence.increment),
                          flashSequence.length,
                          "Incorrect sequence length");
         }
