@@ -158,16 +158,18 @@ class anzanTest {
     @Test //Verify flash sequence parameter is of correct length given level
         // This function only tests that the getSequenceLength method returns expected value
     void testFlashSequenceLength() {
+        int desiredLength = anzan.numberSequence.minimum;
         //Test length for subsequent levels
         for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
             //Set level
             defaultAnzan.setCurrentLevel(i);
             //Make sure sequence length getter returns correct value
             //sequence length should start at minimum and increment every level
-            assertEquals(anzan.numberSequence.minimum + i*anzan.numberSequence.increment,
-                                  defaultAnzan.getSequenceLength(),
-                        "Sequence length getter returns incorrect value");
+            assertEquals(desiredLength, defaultAnzan.getSequenceLength(), "Sequence length getter returns incorrect value");
+
+            desiredLength = desiredLength + anzan.numberSequence.increment;
         }
+
     }
 
     @Test //Verify generate sequence has correct length

@@ -203,7 +203,7 @@ class anzan {
             }
             return (randGenerator.nextInt(maxNumber) + 1); //Increment 1 to value since randGenerator generated 0 - (n-1) numbers
         } catch (Exception e){
-            //If coudn't generate random number then reset macNumber and return 0;
+            //If couldn't generate random number then reset macNumber and return 0;
             maxNumber = defaultRange;
             return 0;
         }
