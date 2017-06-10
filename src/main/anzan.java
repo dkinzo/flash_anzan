@@ -21,10 +21,8 @@ class anzan {
         final static int normalIncrement = 1;       ///< Normal level increment
         //TODO implement advanced increment
         final static int advancedIncrement = 2;     ///< Advanced level increment (used when perfect score is achieved in level)
-
-        static int currentLevel = minimum;            ///< Current anzan level
     }
-
+    private int currentLevel = level.minimum;            ///< Current anzan level
 
     /*
      * flashDelay abstracts constants related to delays between numbers that are displayed in the flash anzan sequence
@@ -41,49 +39,17 @@ class anzan {
      */
     static class numberSequence {
         final static int minimum = 2;       ///< Initial amount of numbers displayed at minimum level
-        final static int increment = 1;     ///< Amount of numbers added per level passed 
+        final static int increment = 1;     ///< Amount of numbers added per level passed
                                             ///  (e.g. if level 1 displays 2 numbers, level 2 will display 2 numbers + increment)
-
-        private static int sequenceLength = minimum;    ///< Define length of flash sequence
-
-        /**
-         * Sets flash sequence length. This determined how many numbers a flash sequence contains. The mininum
-         * numbers is defined by a constant and correspond to the minimum level. After every level the sequence length
-         * increments by numberSequence.increment
-         */
-        static void updateSequenceLength() throws IllegalArgumentException{
-            int _sequenceLength = calculateSequenceLength(level.currentLevel);
-
-            //Make sure given argument is within allowable range
-            //Since there is no maximum value, only check minimum value
-            if (_sequenceLength < numberSequence.minimum) {
-                throw new IllegalArgumentException("Attempted to set sequence length to smaller than acceptable");
-            }
-
-            sequenceLength = _sequenceLength;
-        }
-
-        /**
-         * Calculates flash sequence length given level. Flash sequence at minimum level should contain numberSequence.minimum numbers
-         * After each level flash sequence length increments by numberSequence.increment
-         * @param desiredLevel respective level to calculate sequence length based off of
-         * @return The sequence length
-         */
-        private static int calculateSequenceLength(int desiredLevel) {
-            return minimum + (desiredLevel - level.minimum) * increment;
-        }
-
     }
+    private int sequenceLength = numberSequence.minimum; ///< Define length of flash sequence
 
+    final static int defaultRange = 9;   ///< Default range of random numbers
+    private int maxNumber = 0;          ///< max allowable number in flash sequence
     private Random randGenerator = new Random();    ///< Random number generator
 
-//    region Getters and Setters
-
-    static int getSequenceLength() {
-        return numberSequence.sequenceLength;
-    }
-
 //    endregion
+
     //region Constructors
     public anzan(int _level) {
         setCurrentLevel(_level);
@@ -96,6 +62,28 @@ class anzan {
 
     //endregion
 
+    //region Getters And Setters
+
+    int getSequenceLength() {
+        return sequenceLength;
+    }
+
+    /**
+     * Sets flash sequence length. This determined how many numbers a flash sequence contains. The mininum
+     * numbers is defined by a constant and correspond to the minimum level. After every level the sequence length
+     * increments by numberSequence.increment
+     */
+    private void updateSequenceLength() throws IllegalArgumentException{
+        int _sequenceLength = calculateSequenceLength(getCurrentLevel());
+
+        //Make sure given argument is within allowable range
+        //Since there is no maximum value, only check minimum value
+        if (_sequenceLength < numberSequence.minimum) {
+            throw new IllegalArgumentException("Attempted to set sequence length to smaller than acceptable");
+        }
+
+        this.sequenceLength = _sequenceLength;
+    }
 
     Duration getAnzanDelay() {
         return anzanDelay;
@@ -104,7 +92,7 @@ class anzan {
     /**
      * Set anzan delay based on current level. Anzan delay is determined by calling calculateAnzanDelay() method
      */
-    private void setAnzanDelay() throws IllegalArgumentException{
+    private void updateAnzanDelay() throws IllegalArgumentException{
         /* The anzan delay is calculated based on current level. The delay decreases by 100ms
          * after each level provided it doesn't go below minimum allowable delay.
          */
@@ -121,33 +109,12 @@ class anzan {
     }
 
     int getCurrentLevel() {
-        return level.currentLevel;
-    }
-
-    /**
-     * currentLevel setter. Validate desired level by checking if desired level is not less than minimum level
-     * @param _level desired level to be set
-     * @throws IllegalArgumentException If desired level is less than minimum level
-     */
-    void setCurrentLevel(int _level) throws IllegalArgumentException{
-        //Verify level is within allowable range
-        if(_level >= level.minimum) {
-            //If valid _level update member variable
-            level.currentLevel = _level;
-            //Compute new delay based on current level
-            setAnzanDelay();
-            //Compute flash sequence length based on current level
-            numberSequence.updateSequenceLength();
-        } else {
-            throw new IllegalArgumentException("currentLevel is less than minimum level() " + level.minimum);
-        }
+        return this.currentLevel;
     }
 
     //endregion
 
     //region private methods
-
-
     /**
      * Calculate anzan delay given a currentLevel. The anzan delay is the delay between flashing numbers. The minimum value
      * is determined by the constant minimum and decreases by increment every level until reaches
@@ -168,9 +135,38 @@ class anzan {
         return calculatedDelay;
     }
 
+    /**
+     * Calculates flash sequence length given level. Flash sequence at minimum level should contain numberSequence.minimum numbers
+     * Sequence length should increment by numberSequence.increment after every level
+     * @param desiredLevel
+     * @return The sequence length
+     */
+    private int calculateSequenceLength(int desiredLevel) {
+        return numberSequence.minimum + (getCurrentLevel() - level.minimum) * numberSequence.increment;
+    }
     //endregion
 
     //region public methods
+
+    /**
+     * currentLevel setter. Validate desired level by checking if desired level is not less than minimum level
+     * @param _level desired level to be set
+     * @throws IllegalArgumentException If desired level is less than minimum level
+     */
+    void setCurrentLevel(int _level) throws IllegalArgumentException{
+        //Verify level is within allowable range
+        if(_level >= level.minimum) {
+            //If valid _level update member variable
+            this.currentLevel = _level;
+            //Compute new delay based on current level
+            updateAnzanDelay();
+            //Compute flash sequence length based on current level
+            updateSequenceLength();
+        } else {
+            throw new IllegalArgumentException("currentLevel is less than minimum level() " + level.minimum);
+        }
+    }
+
     /**
      * Advances to next level (increment 1 level)
      */
@@ -189,40 +185,29 @@ class anzan {
         int flashSequence[] = new int[getSequenceLength()];
 
         for (int i = 0; i < flashSequence.length; i++) {
-            flashSequence[i] = getRandomNumber();
+            flashSequence[i] = generateRandomNumber();
         }
 
         return flashSequence;
     }
 
     /**
-     * Generate random number according to range value specified by comboBox
-     * @return random number generated
+     * Generate random number according to desired range value
+     * @return The random number
      */
-    private int getRandomNumber(){
-        return 0;
-//        int rangeIndex = 0; //Helper variable to store range value
-//        try {
-//            //check range value from comboBox
-//            rangeIndex = comboRange.getSelectionModel().getSelectedIndex();
-//
-//            //generate random number
-//            //Add 1 to value since generator may return value 0
-//            return (randGenerator.nextInt(maxValue[rangeIndex]) + 1);
-//
-//        }
-//        catch (IndexOutOfBoundsException e){
-//            //If out of bounds or range hasn't been selected. Select 1-9 as default
-//            comboRange.getSelectionModel().select(0);
-//            rangeIndex = 0;
-//
-//            //generate random number
-//            //Add 1 to value since generator may return value 0
-//            return (randGenerator.nextInt(maxValue[rangeIndex]) + 1);
-//        }
-//        catch (Exception e){
-//            throw e;
-//        }
+    private int generateRandomNumber() {
+        try {
+            //Make sure maxNumber is valid
+            if (maxNumber < 0) {
+                maxNumber = defaultRange;
+            }
+            return (randGenerator.nextInt(maxNumber) + 1); //Increment 1 to value since randGenerator generated 0 - (n-1) numbers
+        } catch (Exception e){
+            //If coudn't generate random number then reset macNumber and return 0;
+            maxNumber = defaultRange;
+            return 0;
+        }
     }
+
     //endregion
 }
