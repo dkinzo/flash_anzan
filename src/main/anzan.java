@@ -44,11 +44,13 @@ class anzan {
     }
     private int sequenceLength = numberSequence.minimum; ///< Define length of flash sequence
 
-    final static int defaultRange = 9;   ///< Default range of random numbers
-
+    private final static int defaultRange = 9;   ///< Default range of random numbers
     private int maxNumber = 0;          ///< max allowable number in flash sequence
 
+    //RNG generate only positive numbers to in order to get negative values need to randomize operation (+,-) as well
     private Random randGenerator = new Random();    ///< Random number generator
+
+    //    endregion
 
     //region Constructors
     public anzan(int _level) {
@@ -60,7 +62,7 @@ class anzan {
         setCurrentLevel(level.minimum);
     }
 
-    //endregion
+    //    endregion
 
     //region Getters And Setters
 
@@ -68,9 +70,13 @@ class anzan {
         return maxNumber;
     }
 
-    //    endregion
-    public void setMaxNumber(int maxNumber) {
-        this.maxNumber = maxNumber;
+    public void setMaxNumber(int maxNumber) throws  IllegalArgumentException{
+        //maxNumber cannot be negative.
+        if (maxNumber < 0) {
+            throw new IllegalArgumentException("maxNumber cannot be negative!");
+        } else {
+            this.maxNumber = maxNumber;
+        }
     }
 
     int getSequenceLength() {
@@ -120,8 +126,7 @@ class anzan {
     int getCurrentLevel() {
         return this.currentLevel;
     }
-
-    //endregion
+    //    endregion
 
     //region private methods
     /**
@@ -147,7 +152,7 @@ class anzan {
     /**
      * Calculates flash sequence length given level. Flash sequence at minimum level should contain numberSequence.minimum numbers
      * Sequence length should increment by numberSequence.increment after every level
-     * @param desiredLevel
+     * @param desiredLevel The level for which the sequence length should be calculated
      * @return The sequence length
      */
     private int calculateSequenceLength(int desiredLevel) {
