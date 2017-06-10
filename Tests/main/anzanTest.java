@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
-import java.util.function.IntPredicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +20,7 @@ class anzanTest {
         defaultAnzan = new anzan();
     }
 
-    @Test //Verify default constructor initializes level to minimum Level
+    @Test //Verify default constructor initializes level to minimumLength Level
     void testDefaultConstructor() {
         anzan testAnzan = new anzan();
         assertEquals(anzan.level.minimum, testAnzan.getCurrentLevel(), "Default constructor level failed");
@@ -46,7 +45,7 @@ class anzanTest {
         assertEquals(19, defaultAnzan.getCurrentLevel(), "Level setter not working");
     }
 
-    @Test //Verify minimum anzan delay is equal to minimum constant
+    @Test //Verify minimumLength anzan delay is equal to minimumLength constant
     void testInitialAnzanDelay() {
         defaultAnzan.setCurrentLevel(anzan.level.minimum);
         assertEquals(anzan.flashDelay.initial, defaultAnzan.getAnzanDelay(), "Initial anzan delay is incorrect");
@@ -54,9 +53,9 @@ class anzanTest {
 
     @Test //Verify set delay changes delay based on level
     void setAnzanDelay() {
-        //Set minimum level for minimum delay
+        //Set minimumLength level for minimumLength delay
         defaultAnzan.setCurrentLevel(anzan.level.minimum);
-        //Get minimum delay
+        //Get minimumLength delay
         Duration initialDelay = defaultAnzan.getAnzanDelay();
 
         //Change level and verify delay is smalled as level increases
@@ -64,35 +63,35 @@ class anzanTest {
         Duration finalDelay = defaultAnzan.getAnzanDelay();
         assertTrue(initialDelay.toMillis() >= finalDelay.toMillis(), "Delay not decreasing with level increase");
 
-        //Assert delay not less than minimum
-        assertTrue(finalDelay.compareTo(anzan.flashDelay.minimum) >= 0, "Delay exceeds minimum delay");
+        //Assert delay not less than minimumLength
+        assertTrue(finalDelay.compareTo(anzan.flashDelay.minimum) >= 0, "Delay exceeds minimumLength delay");
     }
 
-    @Test //Verify delay never less than minimum delay
+    @Test //Verify delay never less than minimumLength delay
     void testMinimumAnzanDelay() {
         defaultAnzan.setCurrentLevel(anzan.level.maximum);
-        assertTrue(defaultAnzan.getAnzanDelay().compareTo(anzan.flashDelay.minimum) >= 0, "Delay is less than minimum delay");
+        assertTrue(defaultAnzan.getAnzanDelay().compareTo(anzan.flashDelay.minimum) >= 0, "Delay is less than minimumLength delay");
     }
 
     //TODO add test maximum allowable level
 
-    @Test //Verify anzan delay decreases by increment after each level
+    @Test //Verify anzan delay decreases by incrementLength after each level
     void testAnzanDelayStep() {
         defaultAnzan.setCurrentLevel(anzan.level.minimum);
-        //Anzan delay should be minimum since level is minimum level -- this is tested above
+        //Anzan delay should be minimumLength since level is minimumLength level -- this is tested above
         Duration Delay = defaultAnzan.getAnzanDelay();
 
-        for (int i = anzan.level.minimum; i < anzan.level.minimum; i++) {
+        for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
             //Increase level
             defaultAnzan.advanceLevel();
             //Compute new delay
             Delay = Delay.minus(anzan.flashDelay.increment);
-            //Make sure Delay doesn't go below minimum delay
+            //Make sure Delay doesn't go below minimumLength delay
             if(Delay.compareTo(anzan.flashDelay.minimum) < 0){
                 Delay = anzan.flashDelay.minimum;
             }
             //Assert new delay is same as delay at level
-            assertEquals(Delay, defaultAnzan.getAnzanDelay(), "Delay increment not working");
+            assertEquals(Delay, defaultAnzan.getAnzanDelay(), "Delay incrementLength not working");
         }
     }
 
@@ -106,23 +105,23 @@ class anzanTest {
 
     @Test //Test generateSequence return correct number of elements based on level
     void AnzanSequenceCorrectMinimumLength() {
-        //Set to minimum level
+        //Set to minimumLength level
         defaultAnzan.setCurrentLevel(anzan.level.minimum);
-        //Generate sequence at minimum level
+        //Generate sequence at minimumLength level
         int flashSequence[] = defaultAnzan.generateSequence();
 
         //Make sure sequence generated has correct amount of numbers in it
-        assertEquals(anzan.numberSequence.minimum, flashSequence.length, "Incorrect minimum sequence length");
+        assertEquals(anzan.numberSequence.minimumLength, flashSequence.length, "Incorrect minimumLength sequence length");
     }
 
     @Test //Test generateSequence increments the correct amount of numbers per level
     void AnzanSequenceLengthIncremet() {
-        //Set to minimum level
+        //Set to minimumLength level
         defaultAnzan.setCurrentLevel(anzan.level.minimum);
         int flashSequence[];
-        int sequenceLength = anzan.numberSequence.minimum;
+        int sequenceLength = anzan.numberSequence.minimumLength;
 
-        //no need to test minimum level, previous test already does that
+        //no need to test minimumLength level, previous test already does that
 
         for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
             //go to next level
@@ -131,7 +130,7 @@ class anzanTest {
             flashSequence = defaultAnzan.generateSequence();
 
             //check generated sequence has correct length
-            assertEquals((sequenceLength = sequenceLength + anzan.numberSequence.increment),
+            assertEquals((sequenceLength = sequenceLength + anzan.numberSequence.incrementLength),
                          flashSequence.length,
                          "Incorrect sequence length");
         }
@@ -158,16 +157,16 @@ class anzanTest {
     @Test //Verify flash sequence parameter is of correct length given level
         // This function only tests that the getSequenceLength method returns expected value
     void testFlashSequenceLength() {
-        int desiredLength = anzan.numberSequence.minimum;
+        int desiredLength = anzan.numberSequence.minimumLength;
         //Test length for subsequent levels
         for (int i = anzan.level.minimum; i < anzan.level.maximum; i++) {
             //Set level
             defaultAnzan.setCurrentLevel(i);
             //Make sure sequence length getter returns correct value
-            //sequence length should start at minimum and increment every level
+            //sequence length should start at minimumLength and incrementLength every level
             assertEquals(desiredLength, defaultAnzan.getSequenceLength(), "Sequence length getter returns incorrect value");
 
-            desiredLength = desiredLength + anzan.numberSequence.increment;
+            desiredLength = desiredLength + anzan.numberSequence.incrementLength;
         }
 
     }
@@ -184,7 +183,7 @@ class anzanTest {
             flashSequence = defaultAnzan.generateSequence();
 
             //Make sure sequence length is correct
-            //sequence length should start at minimum and increment every level
+            //sequence length should start at minimumLength and incrementLength every level
             assertEquals(defaultAnzan.getSequenceLength(), //Can just call this method here because its being testes above
                          flashSequence.length,
                         "Sequence length getter returns incorrect value");
@@ -193,11 +192,25 @@ class anzanTest {
 
     @Test //Verify maxNumber getter and setter works
     void maxNumberGetterSetter() {
-        fail("unimplemented");
+        //Assert maxNumber setter throws exception for negative numbers
+        assertThrows(IllegalArgumentException.class, () -> defaultAnzan.setMaxNumber(anzan.numberSequence.minNumber - 1));
+
+        //Assert Getter and Setter for MaxNumber works properly for valid numbers
+        defaultAnzan.setMaxNumber(99);
+        assertEquals(99, defaultAnzan.getMaxNumber(), "maxNumber getter or setter not working properly");
+
     }
 
     @Test //Verify flash sequence doesn't contain numbers outside allowable range
     void maxAndMinSequenceNumber() {
-        fail("unimplemented");
+        //Generate flash sequence for top level and analyze numbers to make sure they are all within acceptable range
+        defaultAnzan.setCurrentLevel(anzan.level.maximum);
+        int flashSequence[] = defaultAnzan.generateSequence();
+
+        for (int number:flashSequence) {
+            if ((number < 0) || (number > defaultAnzan.getMaxNumber())) {
+                fail("Illegal number found in sequence");
+            }
+        }
     }
 }
